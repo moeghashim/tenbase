@@ -53,6 +53,40 @@
   background: #28c840;
 }
 
+.desktop-app body {
+  overflow: hidden;
+  background: var(--app-bg);
+}
+
+.desktop-app .app-shell {
+  min-height: 100svh;
+  height: 100svh;
+  max-width: none;
+  margin: 0;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.desktop-app .topbar {
+  padding-left: 88px;
+  -webkit-app-region: drag;
+}
+
+.desktop-app .window-controls {
+  display: none;
+}
+
+.desktop-app button,
+.desktop-app input,
+.desktop-app .sidebar,
+.desktop-app .tabs,
+.desktop-app .format-toolbar,
+.desktop-app .inspector,
+.desktop-app .statusbar {
+  -webkit-app-region: no-drag;
+}
+
 .statusbar {
   min-height: 32px;
   padding: 0 16px;
