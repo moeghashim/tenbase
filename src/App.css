@@ -1,9 +1,16 @@
 .app-shell {
-  min-height: 100svh;
+  min-height: calc(100svh - 48px);
+  height: calc(100svh - 48px);
+  max-width: 1480px;
+  margin: 24px auto;
   display: grid;
   grid-template-rows: auto 1fr auto;
+  overflow: hidden;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 28px;
   background: var(--app-bg);
   color: var(--text);
+  box-shadow: var(--shadow);
 }
 
 .topbar,
@@ -17,8 +24,33 @@
 }
 
 .topbar {
-  min-height: 64px;
-  padding: 10px 16px;
+  min-height: 58px;
+  padding: 10px 18px;
+}
+
+.window-controls {
+  display: flex;
+  align-items: center;
+  gap: 9px;
+}
+
+.window-controls span {
+  width: 14px;
+  height: 14px;
+  border-radius: 999px;
+  box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.08);
+}
+
+.close-dot {
+  background: #ff5f57;
+}
+
+.minimize-dot {
+  background: #ffbd2e;
+}
+
+.zoom-dot {
+  background: #28c840;
 }
 
 .statusbar {
@@ -34,7 +66,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  min-width: 180px;
+  min-width: 170px;
 }
 
 .brand svg {
@@ -82,7 +114,7 @@ button {
   gap: 8px;
   min-height: 36px;
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: 12px;
   background: var(--button-bg);
   color: var(--text);
   cursor: pointer;
@@ -94,7 +126,8 @@ button {
 }
 
 .command-button {
-  padding: 0 12px;
+  padding: 0 14px;
+  box-shadow: 0 7px 16px rgba(41, 56, 75, 0.08);
 }
 
 .command-button.primary {
@@ -111,7 +144,7 @@ button {
 
 .format-toolbar button,
 .view-switcher button {
-  width: 36px;
+  width: 38px;
   padding: 0;
 }
 
@@ -144,7 +177,7 @@ button {
 .workspace {
   min-height: 0;
   display: grid;
-  grid-template-columns: 280px minmax(0, 1fr) 280px;
+  grid-template-columns: 278px minmax(0, 1fr) 286px;
 }
 
 .sidebar,
@@ -159,7 +192,7 @@ button {
   flex-direction: column;
   gap: 14px;
   overflow: auto;
-  padding: 14px;
+  padding: 18px;
   background: var(--surface-subtle);
 }
 
@@ -194,14 +227,14 @@ button {
 .panel-title span {
   color: var(--muted);
   font-size: 11px;
-  font-weight: 720;
-  letter-spacing: 0.08em;
+  font-weight: 760;
+  letter-spacing: 0.09em;
   text-transform: uppercase;
 }
 
 .pane-heading strong {
   color: var(--text-strong);
-  font-size: 14px;
+  font-size: 16px;
 }
 
 .pane-heading svg {
@@ -216,11 +249,12 @@ button {
   display: flex;
   align-items: center;
   gap: 8px;
-  min-height: 38px;
-  padding: 0 10px;
+  min-height: 42px;
+  padding: 0 12px;
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: 12px;
   background: var(--surface);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.72);
 }
 
 .search-field svg {
@@ -251,7 +285,7 @@ button {
 .toc-panel button {
   width: 100%;
   text-align: left;
-  border-radius: 8px;
+  border-radius: 11px;
   background: transparent;
   color: var(--text);
   cursor: pointer;
@@ -262,7 +296,7 @@ button {
   grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
   gap: 9px;
-  padding: 8px;
+  padding: 9px 10px;
 }
 
 .file-row svg {
@@ -287,7 +321,8 @@ button {
 .file-row strong,
 .search-results span {
   color: var(--text-strong);
-  font-size: 13px;
+  font-size: 15px;
+  font-weight: 700;
 }
 
 .file-row small,
@@ -304,7 +339,15 @@ button {
 }
 
 .file-row.active {
-  box-shadow: inset 3px 0 0 var(--accent);
+  background: var(--accent);
+  color: #fff;
+  box-shadow: 0 7px 16px rgba(45, 116, 255, 0.24);
+}
+
+.file-row.active svg,
+.file-row.active strong,
+.file-row.active small {
+  color: #fff;
 }
 
 .file-row i,
@@ -349,7 +392,7 @@ button {
   min-height: 34px;
   padding: 0 9px;
   border: 1px solid transparent;
-  border-radius: 8px 8px 0 0;
+  border-radius: 12px 12px 0 0;
   background: transparent;
   color: var(--muted);
   cursor: pointer;
@@ -377,13 +420,14 @@ button {
   justify-content: flex-start;
   gap: 10px;
   overflow-x: auto;
-  padding: 10px;
+  padding: 10px 12px;
   border-bottom: 1px solid var(--border);
   background: var(--surface);
 }
 
 .tool-group {
-  padding-right: 8px;
+  gap: 7px;
+  padding-right: 10px;
   border-right: 1px solid var(--border);
 }
 
@@ -423,8 +467,8 @@ button {
 }
 
 .panel-title {
-  min-height: 40px;
-  padding: 0 14px;
+  min-height: 42px;
+  padding: 0 18px;
   border-bottom: 1px solid var(--border);
   background: var(--surface-subtle);
 }
@@ -451,16 +495,16 @@ button {
   height: 100%;
   background: var(--editor-bg);
   color: var(--text-strong);
-  font-size: 15px;
+  font-size: 16px;
 }
 
 .cm-scroller {
-  font-family: var(--mono);
-  line-height: 1.62;
+  font-family: var(--sans);
+  line-height: 1.72;
 }
 
 .cm-content {
-  padding: 22px 24px;
+  padding: 30px clamp(22px, 4vw, 56px);
 }
 
 .cm-focused {
@@ -468,11 +512,11 @@ button {
 }
 
 .markdown-preview {
-  padding: 28px clamp(20px, 4vw, 52px);
+  padding: 42px clamp(28px, 5vw, 72px);
   background: var(--preview-bg);
   color: var(--doc-text);
-  font-size: 16px;
-  line-height: 1.68;
+  font-size: 18px;
+  line-height: 1.72;
 }
 
 .markdown-preview > *:first-child {
@@ -490,13 +534,15 @@ button {
 }
 
 .markdown-preview h1 {
-  margin: 0 0 18px;
-  font-size: 36px;
+  margin: 0 0 20px;
+  font-size: 34px;
+  font-weight: 780;
 }
 
 .markdown-preview h2 {
-  margin: 32px 0 12px;
-  font-size: 25px;
+  margin: 36px 0 12px;
+  font-size: 26px;
+  font-weight: 760;
 }
 
 .markdown-preview h3 {
@@ -517,7 +563,7 @@ button {
   display: block;
   max-width: 100%;
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: 14px;
 }
 
 .markdown-preview table {
@@ -529,7 +575,7 @@ button {
 
 .markdown-preview th,
 .markdown-preview td {
-  padding: 9px 11px;
+  padding: 10px 12px;
   border: 1px solid var(--border);
   text-align: left;
 }
@@ -540,7 +586,7 @@ button {
 }
 
 .markdown-preview blockquote {
-  border-left: 4px solid var(--accent);
+  border-left: 4px solid #96b7d9;
   color: var(--muted);
   margin-left: 0;
   padding-left: 16px;
@@ -552,15 +598,15 @@ button {
   color: var(--doc-heading);
   font-family: var(--mono);
   font-size: 0.92em;
-  padding: 2px 5px;
+  padding: 3px 6px;
 }
 
 .markdown-preview pre {
   overflow: auto;
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: 14px;
   background: var(--code-bg);
-  padding: 14px;
+  padding: 16px;
 }
 
 .markdown-preview pre code {
@@ -604,34 +650,37 @@ button {
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 8px;
+  gap: 9px;
   margin-top: 12px;
 }
 
 .stats-grid span {
   display: grid;
   gap: 3px;
-  min-height: 64px;
+  min-height: 68px;
   align-content: center;
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: 14px;
   background: var(--surface);
-  padding: 10px;
+  padding: 12px;
   color: var(--muted);
   font-size: 12px;
 }
 
 .stats-grid strong {
   color: var(--text-strong);
-  font-size: 20px;
+  font-size: 22px;
   line-height: 1;
 }
 
 .toc-panel button {
-  min-height: 30px;
-  padding: 6px 10px;
+  min-height: 34px;
+  border-bottom: 1px solid var(--border);
+  border-radius: 0;
+  padding: 7px 10px;
   color: var(--text);
-  font-size: 13px;
+  font-size: 14px;
+  font-weight: 650;
 }
 
 .action-grid {
@@ -689,10 +738,22 @@ button {
 }
 
 @media (max-width: 760px) {
+  .app-shell {
+    min-height: 100svh;
+    height: auto;
+    margin: 0;
+    border: 0;
+    border-radius: 0;
+  }
+
   .topbar,
   .statusbar {
     align-items: flex-start;
     flex-direction: column;
+  }
+
+  .window-controls {
+    display: none;
   }
 
   .topbar-actions {

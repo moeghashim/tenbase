@@ -1,28 +1,29 @@
 @import "katex/dist/katex.min.css";
 
 :root {
-  --app-bg: #eceff3;
+  --app-bg: #f4f3ef;
   --surface: #ffffff;
-  --surface-subtle: #f7f8fa;
+  --surface-subtle: #f6f6f4;
   --canvas: #ffffff;
   --preview-bg: #ffffff;
-  --editor-bg: #fbfbfd;
+  --editor-bg: #ffffff;
   --button-bg: #ffffff;
-  --button-hover: #f0f4f8;
-  --text: #334155;
-  --text-strong: #111827;
-  --muted: #64748b;
-  --doc-text: #1f2937;
-  --doc-heading: #0f172a;
-  --border: #dce2ea;
-  --border-strong: #bcc7d4;
-  --accent: #277366;
-  --accent-soft: #e6f3ef;
+  --button-hover: #f2f2f0;
+  --text: #484848;
+  --text-strong: #343434;
+  --muted: #8c8c8c;
+  --doc-text: #484848;
+  --doc-heading: #404040;
+  --border: #e2e2df;
+  --border-strong: #c8c8c3;
+  --accent: #2d74ff;
+  --accent-soft: #eef4ff;
   --success: #1f8a5b;
-  --warning: #d59622;
+  --warning: #d89a24;
   --danger: #c2413d;
-  --code-bg: #eef2f6;
-  --shadow: 0 14px 36px rgba(15, 23, 42, 0.14);
+  --code-bg: #f0f0ef;
+  --shadow:
+    0 42px 95px rgba(41, 56, 75, 0.18), 0 14px 36px rgba(41, 56, 75, 0.12);
   --sans:
     Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont,
     "Segoe UI", sans-serif;
@@ -62,28 +63,4 @@ svg {
 
 ::selection {
   background: color-mix(in srgb, var(--accent), transparent 72%);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --app-bg: #11151b;
-    --surface: #171c23;
-    --surface-subtle: #1c232c;
-    --canvas: #131820;
-    --preview-bg: #151a21;
-    --editor-bg: #121820;
-    --button-bg: #1b222c;
-    --button-hover: #242d39;
-    --text: #cbd5e1;
-    --text-strong: #f8fafc;
-    --muted: #94a3b8;
-    --doc-text: #dbe3ee;
-    --doc-heading: #f8fafc;
-    --border: #2b3542;
-    --border-strong: #445163;
-    --accent: #62b39c;
-    --accent-soft: rgba(98, 179, 156, 0.16);
-    --code-bg: #202833;
-    --shadow: 0 14px 36px rgba(0, 0, 0, 0.32);
-  }
 }

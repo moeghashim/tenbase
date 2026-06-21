@@ -662,6 +662,12 @@ function App() {
   return (
     <div className="app-shell">
       <header className="topbar">
+        <div className="window-controls" aria-hidden="true">
+          <span className="close-dot" />
+          <span className="minimize-dot" />
+          <span className="zoom-dot" />
+        </div>
+
         <div className="brand" aria-label="Tenbase">
           <BookOpen aria-hidden="true" />
           <div>
