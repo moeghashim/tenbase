@@ -1,0 +1,755 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920, height=1080" />
+    <title>Tenbase Promo</title>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      html,
+      body {
+        margin: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: #f4f3ef;
+        color: #343434;
+        font-family: sans-serif;
+      }
+
+      #root {
+        position: relative;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background: #f4f3ef;
+      }
+
+      .scene {
+        position: absolute;
+        inset: 0;
+        width: 1920px;
+        height: 1080px;
+        overflow: hidden;
+        background-color: #f4f3ef;
+      }
+
+      #scene2,
+      #scene3,
+      #scene4 {
+        opacity: 0;
+        visibility: hidden;
+      }
+
+      .scene-content {
+        position: relative;
+        z-index: 2;
+        display: flex;
+        width: 100%;
+        height: 100%;
+        padding: 96px 112px;
+        gap: 56px;
+        box-sizing: border-box;
+      }
+
+      .grain {
+        position: absolute;
+        inset: 0;
+        z-index: 1;
+        opacity: 0.22;
+        background-image:
+          linear-gradient(rgba(45, 116, 255, 0.04) 1px, rgba(255, 255, 255, 0) 1px),
+          linear-gradient(90deg, rgba(45, 116, 255, 0.04) 1px, rgba(255, 255, 255, 0) 1px);
+        background-size: 72px 72px;
+      }
+
+      .hero-copy,
+      .side-copy {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        max-width: 720px;
+        gap: 28px;
+      }
+
+      .eyebrow {
+        display: inline-flex;
+        width: fit-content;
+        align-items: center;
+        gap: 12px;
+        border: 1px solid #e2e2df;
+        border-radius: 999px;
+        background: #ffffff;
+        color: #5b5b5b;
+        padding: 12px 18px;
+        font-size: 24px;
+        font-weight: 700;
+        letter-spacing: 0.01em;
+      }
+
+      .eyebrow-mark {
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: #0b63f6;
+        box-shadow: 0 0 0 8px rgba(45, 116, 255, 0.12);
+      }
+
+      h1,
+      h2 {
+        margin: 0;
+        color: #343434;
+        font-family: serif;
+        font-weight: 800;
+        letter-spacing: -0.04em;
+        line-height: 0.94;
+      }
+
+      h1 {
+        max-width: 840px;
+        font-size: 138px;
+      }
+
+      h2 {
+        max-width: 760px;
+        font-size: 108px;
+      }
+
+      .lede {
+        max-width: 670px;
+        margin: 0;
+        color: #525252;
+        font-size: 34px;
+        font-weight: 430;
+        letter-spacing: -0.01em;
+        line-height: 1.24;
+      }
+
+      .product-window {
+        align-self: center;
+        width: 910px;
+        height: 642px;
+        overflow: hidden;
+        border: 1px solid rgba(0, 0, 0, 0.09);
+        border-radius: 34px;
+        background: #ffffff;
+        box-shadow:
+          0 48px 110px rgba(41, 56, 75, 0.18),
+          0 16px 36px rgba(41, 56, 75, 0.12);
+      }
+
+      .window-bar {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 72px;
+        padding: 0 26px;
+        border-bottom: 1px solid #e2e2df;
+        background: #ffffff;
+      }
+
+      .lights {
+        display: flex;
+        gap: 12px;
+      }
+
+      .lights span {
+        width: 18px;
+        height: 18px;
+        border-radius: 50%;
+      }
+
+      .red {
+        background: #ff5f57;
+      }
+
+      .yellow {
+        background: #ffbd2e;
+      }
+
+      .green {
+        background: #28c840;
+      }
+
+      .window-title {
+        color: #343434;
+        font-size: 23px;
+        font-weight: 760;
+      }
+
+      .save-pill {
+        display: inline-flex;
+        align-items: center;
+        border: 1px solid rgba(6, 79, 196, 0.22);
+        border-radius: 15px;
+        background: #eaf2ff;
+        color: #064fc4;
+        padding: 10px 18px;
+        font-size: 21px;
+        font-weight: 720;
+      }
+
+      .app-grid {
+        display: grid;
+        grid-template-columns: 246px 1fr 250px;
+        height: 570px;
+      }
+
+      .sidebar-ui,
+      .inspector-ui {
+        background: #f6f6f4;
+        padding: 24px;
+      }
+
+      .sidebar-ui {
+        border-right: 1px solid #e2e2df;
+      }
+
+      .inspector-ui {
+        border-left: 1px solid #e2e2df;
+      }
+
+      .label {
+        color: #60646b;
+        font-size: 17px;
+        font-weight: 780;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+
+      .search {
+        height: 45px;
+        margin: 20px 0 18px;
+        border: 1px solid #e2e2df;
+        border-radius: 15px;
+        background: #ffffff;
+      }
+
+      .file-row {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        height: 92px;
+        margin-bottom: 12px;
+        border-radius: 16px;
+        padding: 0 18px;
+        color: #343434;
+      }
+
+      .file-row strong {
+        font-size: 22px;
+        line-height: 1.08;
+      }
+
+      .file-row span {
+        margin-top: 3px;
+        color: #60646b;
+        font-size: 16px;
+        line-height: 1.16;
+      }
+
+      .file-row.active {
+        background: #eaf2ff;
+        color: #064fc4;
+        box-shadow: 0 12px 24px rgba(45, 116, 255, 0.22);
+      }
+
+      .file-row.active strong,
+      .file-row.active span {
+        color: #064fc4;
+      }
+
+      .doc-area {
+        display: grid;
+        grid-template-rows: 58px 1fr;
+        background: #ffffff;
+      }
+
+      .toolbar {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        border-bottom: 1px solid #e2e2df;
+        padding: 0 18px;
+      }
+
+      .tool {
+        display: grid;
+        width: 40px;
+        height: 40px;
+        place-items: center;
+        border: 1px solid #e2e2df;
+        border-radius: 12px;
+        color: #343434;
+        font-family: monospace;
+        font-size: 21px;
+        font-weight: 700;
+      }
+
+      .tool.blue {
+        border-color: #0b63f6;
+        color: #0b63f6;
+        background: #eaf2ff;
+      }
+
+      .editor-preview {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        min-height: 0;
+      }
+
+      .source-pane,
+      .preview-pane {
+        padding: 30px 34px;
+      }
+
+      .source-pane {
+        border-right: 1px solid #e2e2df;
+        color: #343434;
+        font-family: monospace;
+        font-size: 21px;
+        font-weight: 600;
+        line-height: 1.56;
+      }
+
+      .code-line {
+        display: block;
+      }
+
+      .preview-pane h3 {
+        margin: 0 0 18px;
+        color: #343434;
+        font-size: 45px;
+        font-weight: 800;
+        letter-spacing: -0.04em;
+        line-height: 0.98;
+      }
+
+      .preview-pane p,
+      .preview-pane li {
+        color: #525252;
+        font-size: 23px;
+        line-height: 1.42;
+      }
+
+      .preview-pane ul {
+        margin: 18px 0 0;
+        padding-left: 24px;
+      }
+
+      .stats {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin-top: 20px;
+      }
+
+      .stat {
+        min-height: 86px;
+        border: 1px solid #e2e2df;
+        border-radius: 18px;
+        background: #ffffff;
+        padding: 16px;
+      }
+
+      .stat strong {
+        display: block;
+        color: #343434;
+        font-size: 34px;
+        line-height: 1;
+        font-variant-numeric: tabular-nums;
+      }
+
+      .stat span {
+        display: block;
+        margin-top: 7px;
+        color: #60646b;
+        font-size: 16px;
+      }
+
+      .outline-line {
+        height: 1px;
+        margin: 24px 0 20px;
+        background: #e2e2df;
+      }
+
+      .outline-item {
+        border-bottom: 1px solid #e2e2df;
+        padding: 13px 0;
+        color: #525252;
+        font-size: 18px;
+        font-weight: 700;
+      }
+
+      .feature-strip {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px;
+        max-width: 720px;
+      }
+
+      .feature-pill {
+        border: 1px solid #e2e2df;
+        border-radius: 999px;
+        background: #ffffff;
+        color: #343434;
+        padding: 15px 22px;
+        font-size: 24px;
+        font-weight: 720;
+        box-shadow: 0 12px 26px rgba(41, 56, 75, 0.08);
+      }
+
+      .split-layout {
+        align-items: center;
+        justify-content: space-between;
+      }
+
+      .big-window {
+        width: 990px;
+        height: 690px;
+      }
+
+      .export-panel {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 18px;
+        margin-top: 26px;
+      }
+
+      .export-chip {
+        display: grid;
+        height: 92px;
+        place-items: center;
+        border: 1px solid #e2e2df;
+        border-radius: 22px;
+        background: #ffffff;
+        color: #343434;
+        font-size: 23px;
+        font-weight: 800;
+        box-shadow: 0 14px 30px rgba(41, 56, 75, 0.08);
+      }
+
+      .blue-card {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        width: 650px;
+        height: 650px;
+        border-radius: 52px;
+        background: #0b63f6;
+        color: #ffffff;
+        padding: 68px;
+        box-shadow: 0 48px 110px rgba(45, 116, 255, 0.26);
+      }
+
+      .blue-card h2,
+      .blue-card p {
+        color: #ffffff;
+      }
+
+      .blue-card p {
+        max-width: 480px;
+        margin: 26px 0 0;
+        font-size: 35px;
+        line-height: 1.18;
+      }
+
+      .closing {
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+      }
+
+      .closing-stack {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 30px;
+      }
+
+      .logo-mark {
+        display: grid;
+        width: 116px;
+        height: 116px;
+        place-items: center;
+        border: 1px solid #e2e2df;
+        border-radius: 30px;
+        background: #ffffff;
+        color: #0b63f6;
+        box-shadow: 0 22px 46px rgba(41, 56, 75, 0.12);
+      }
+
+      .book-icon {
+        position: relative;
+        width: 54px;
+        height: 48px;
+      }
+
+      .book-icon::before,
+      .book-icon::after {
+        content: "";
+        position: absolute;
+        top: 3px;
+        width: 24px;
+        height: 40px;
+        border: 4px solid #0b63f6;
+        border-radius: 7px;
+      }
+
+      .book-icon::before {
+        left: 1px;
+        border-right: 0;
+      }
+
+      .book-icon::after {
+        right: 1px;
+        border-left: 0;
+      }
+
+      .closing h2 {
+        max-width: 980px;
+        font-size: 132px;
+      }
+
+      .closing p {
+        max-width: 760px;
+        margin: 0;
+        color: #525252;
+        font-size: 36px;
+        line-height: 1.22;
+      }
+
+      .cta {
+        border-radius: 999px;
+        background: #0b63f6;
+        color: #ffffff;
+        padding: 20px 34px;
+        font-size: 28px;
+        font-weight: 800;
+        box-shadow: 0 16px 34px rgba(45, 116, 255, 0.24);
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="tenbase-promo"
+      data-start="0"
+      data-duration="20"
+      data-width="1920"
+      data-height="1080"
+    >
+      <section id="scene1" class="scene">
+        <div class="grain"></div>
+        <div class="scene-content split-layout">
+          <div class="hero-copy">
+            <div class="eyebrow"><span class="eyebrow-mark"></span>Tenbase Markdown Desk</div>
+            <h1>Plain Markdown. Polished writing.</h1>
+            <p class="lede">
+              A desktop and mobile writing space for people who want portable files without a
+              developer-shaped editor.
+            </p>
+          </div>
+
+          <div class="product-window app-window">
+            <div class="window-bar">
+              <div class="lights"><span class="red"></span><span class="yellow"></span><span class="green"></span></div>
+              <div class="window-title">Welcome.md</div>
+              <div class="save-pill">Saved</div>
+            </div>
+            <div class="app-grid">
+              <aside class="sidebar-ui">
+                <div class="label">Workspace</div>
+                <div class="search"></div>
+                <div class="file-row active"><strong>Welcome.md</strong><span>Starter/Welcome.md</span></div>
+                <div class="file-row"><strong>Launch Plan.md</strong><span>Projects/Launch Plan.md</span></div>
+                <div class="file-row"><strong>Notes.md</strong><span>Notes/Meeting Notes.md</span></div>
+              </aside>
+              <main class="doc-area">
+                <div class="toolbar">
+                  <div class="tool">B</div>
+                  <div class="tool">I</div>
+                  <div class="tool">H1</div>
+                  <div class="tool">☑</div>
+                  <div class="tool blue">▥</div>
+                </div>
+                <div class="editor-preview">
+                  <div class="source-pane">
+                    <span class="code-line"># Welcome to Tenbase</span>
+                    <span class="code-line">- Open a folder</span>
+                    <span class="code-line">- Edit in tabs</span>
+                    <span class="code-line">- Export anywhere</span>
+                  </div>
+                  <div class="preview-pane">
+                    <h3>Welcome to Tenbase</h3>
+                    <p>Your notes stay local as Markdown files.</p>
+                    <ul><li>Folder workspace</li><li>Live preview</li><li>Portable exports</li></ul>
+                  </div>
+                </div>
+              </main>
+              <aside class="inspector-ui">
+                <div class="label">Document</div>
+                <div class="stats"><div class="stat"><strong>137</strong><span>Words</span></div><div class="stat"><strong>1m</strong><span>Read</span></div></div>
+                <div class="outline-line"></div>
+                <div class="label">Outline</div>
+                <div class="outline-item">Welcome</div>
+                <div class="outline-item">Markdown easier</div>
+                <div class="outline-item">Export</div>
+              </aside>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="scene2" class="scene">
+        <div class="grain"></div>
+        <div class="scene-content split-layout">
+          <div class="blue-card">
+            <h2>Open your folder. Keep your files.</h2>
+            <p>No account. No cloud lock-in. Just the Markdown you already own.</p>
+          </div>
+          <div class="side-copy">
+            <div class="eyebrow"><span class="eyebrow-mark"></span>Local-first workspace</div>
+            <div class="feature-strip">
+              <div class="feature-pill">Folder sidebar</div>
+              <div class="feature-pill">Single-file mode</div>
+              <div class="feature-pill">Tabs</div>
+              <div class="feature-pill">Autosave</div>
+              <div class="feature-pill">Browser fallback</div>
+            </div>
+            <p class="lede">
+              Tenbase gives non-technical writers a familiar document surface while preserving
+              plain `.md` files underneath.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section id="scene3" class="scene">
+        <div class="grain"></div>
+        <div class="scene-content split-layout">
+          <div class="side-copy">
+            <div class="eyebrow"><span class="eyebrow-mark"></span>Write with context</div>
+            <h2>Preview, outline, stats, search.</h2>
+            <p class="lede">
+              Tables, checkboxes, code, images, and math render as you write. The document stays
+              readable before you share it.
+            </p>
+          </div>
+          <div class="product-window big-window feature-window">
+            <div class="window-bar">
+              <div class="lights"><span class="red"></span><span class="yellow"></span><span class="green"></span></div>
+              <div class="window-title">Draft.md</div>
+              <div class="save-pill">Live Preview</div>
+            </div>
+            <div class="app-grid">
+              <aside class="sidebar-ui">
+                <div class="label">Search</div>
+                <div class="search"></div>
+                <div class="file-row active"><strong>Draft.md</strong><span>Content match</span></div>
+                <div class="file-row"><strong>Outline.md</strong><span>Heading match</span></div>
+              </aside>
+              <main class="doc-area">
+                <div class="toolbar">
+                  <div class="tool">Σ</div>
+                  <div class="tool">#</div>
+                  <div class="tool">▤</div>
+                  <div class="tool blue">👁</div>
+                </div>
+                <div class="editor-preview">
+                  <div class="source-pane">
+                    <span class="code-line">## Launch Notes</span>
+                    <span class="code-line">| Format | Ready |</span>
+                    <span class="code-line">| PDF | Yes |</span>
+                    <span class="code-line">$E = mc²$</span>
+                  </div>
+                  <div class="preview-pane">
+                    <h3>Launch Notes</h3>
+                    <p>Markdown that looks publishable while it stays editable.</p>
+                    <div class="export-panel"><div class="export-chip">PDF</div><div class="export-chip">PNG</div><div class="export-chip">ePub</div><div class="export-chip">HTML</div></div>
+                  </div>
+                </div>
+              </main>
+              <aside class="inspector-ui">
+                <div class="label">Stats</div>
+                <div class="stats"><div class="stat"><strong>842</strong><span>Words</span></div><div class="stat"><strong>4m</strong><span>Read</span></div></div>
+                <div class="outline-line"></div>
+                <div class="label">Share</div>
+                <div class="outline-item">Copy TXT</div>
+                <div class="outline-item">Copy HTML</div>
+                <div class="outline-item">Copy RTF</div>
+              </aside>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="scene4" class="scene">
+        <div class="grain"></div>
+        <div class="scene-content closing">
+          <div class="closing-stack">
+            <div class="logo-mark"><div class="book-icon"></div></div>
+            <h2>Markdown files finally feel friendly.</h2>
+            <p>Tenbase is a clean writing desk for local notes, drafts, docs, and publishing handoff.</p>
+            <div class="cta">github.com/moeghashim/tenbase</div>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+
+      tl.from("#scene1 .eyebrow", { y: 34, opacity: 0, duration: 0.55, ease: "expo.out" }, 0.2);
+      tl.from("#scene1 h1", { y: 58, opacity: 0, duration: 0.78, ease: "power4.out" }, 0.34);
+      tl.from("#scene1 .lede", { x: -36, opacity: 0, duration: 0.52, ease: "power3.out" }, 0.72);
+      tl.from("#scene1 .app-window", { scale: 0.92, x: 70, opacity: 0, duration: 0.82, ease: "back.out(1.2)" }, 0.48);
+      tl.from("#scene1 .file-row", { x: -28, opacity: 0, duration: 0.38, stagger: 0.07, ease: "sine.out" }, 1.02);
+      tl.to("#scene1 .app-window", { y: -12, duration: 3.2, repeat: 4, yoyo: true, ease: "sine.inOut" }, 1.4);
+
+      tl.to("#scene1", { x: -1920, duration: 0.5, ease: "power3.inOut" }, 4.45);
+      tl.set("#scene2", { visibility: "visible" }, 4.44);
+      tl.fromTo("#scene2", { x: 1920, opacity: 1 }, { x: 0, duration: 0.5, ease: "power3.inOut" }, 4.45);
+      tl.set("#scene1", { opacity: 0, visibility: "hidden" }, 4.96);
+      tl.from("#scene2 .blue-card", { scale: 0.88, rotation: -2, opacity: 0, duration: 0.64, ease: "back.out(1.1)" }, 4.7);
+      tl.from("#scene2 .eyebrow", { x: 42, opacity: 0, duration: 0.4, ease: "power3.out" }, 4.86);
+      tl.from("#scene2 .feature-pill", { y: 36, opacity: 0, duration: 0.36, stagger: 0.055, ease: "expo.out" }, 5.04);
+      tl.from("#scene2 .lede", { y: 40, opacity: 0, duration: 0.56, ease: "sine.out" }, 5.46);
+      tl.to("#scene2 .blue-card", { y: 10, duration: 2.8, repeat: 3, yoyo: true, ease: "sine.inOut" }, 6.15);
+
+      tl.to("#scene2", { x: -1920, duration: 0.5, ease: "power3.inOut" }, 9.15);
+      tl.set("#scene3", { visibility: "visible" }, 9.14);
+      tl.fromTo("#scene3", { x: 1920, opacity: 1 }, { x: 0, duration: 0.5, ease: "power3.inOut" }, 9.15);
+      tl.set("#scene2", { opacity: 0, visibility: "hidden" }, 9.66);
+      tl.from("#scene3 .eyebrow", { y: -32, opacity: 0, duration: 0.42, ease: "expo.out" }, 9.44);
+      tl.from("#scene3 h2", { x: -58, opacity: 0, duration: 0.7, ease: "power4.out" }, 9.54);
+      tl.from("#scene3 .lede", { y: 36, opacity: 0, duration: 0.48, ease: "sine.out" }, 9.96);
+      tl.from("#scene3 .feature-window", { scale: 0.9, x: 80, opacity: 0, duration: 0.76, ease: "back.out(1.15)" }, 9.48);
+      tl.from("#scene3 .export-chip", { scale: 0.72, opacity: 0, duration: 0.34, stagger: 0.065, ease: "power3.out" }, 10.48);
+      tl.to("#scene3 .feature-window", { y: -9, duration: 2.4, repeat: 3, yoyo: true, ease: "sine.inOut" }, 11.35);
+
+      tl.to("#scene3", { filter: "blur(14px)", scale: 1.025, opacity: 0, duration: 0.58, ease: "power2.inOut" }, 14.15);
+      tl.set("#scene3", { opacity: 0, visibility: "hidden" }, 14.74);
+      tl.set("#scene4", { visibility: "visible" }, 14.23);
+      tl.fromTo(
+        "#scene4",
+        { filter: "blur(16px)", scale: 0.97, opacity: 0 },
+        { filter: "blur(0px)", scale: 1, opacity: 1, duration: 0.72, ease: "power2.inOut" },
+        14.24,
+      );
+      tl.from("#scene4 .logo-mark", { scale: 0.55, rotation: -8, opacity: 0, duration: 0.66, ease: "back.out(1.35)" }, 14.42);
+      tl.from("#scene4 h2", { y: 54, opacity: 0, duration: 0.74, ease: "expo.out" }, 14.64);
+      tl.from("#scene4 p", { y: 34, opacity: 0, duration: 0.5, ease: "power3.out" }, 15.16);
+      tl.from("#scene4 .cta", { scale: 0.84, opacity: 0, duration: 0.42, ease: "sine.out" }, 15.48);
+      tl.to("#scene4 .logo-mark", { y: -8, duration: 1.8, repeat: 2, yoyo: true, ease: "sine.inOut" }, 16.45);
+      tl.to("#scene4 .closing-stack", { opacity: 0, y: -24, duration: 0.55, ease: "power2.in" }, 19.28);
+
+      window.__timelines["tenbase-promo"] = tl;
+    </script>
+  </body>
+</html>
