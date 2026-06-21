@@ -18,10 +18,15 @@ import {
   Hash,
   Heading1,
   Heading2,
+  Highlighter,
   Image,
   Italic,
   List,
   PanelLeft,
+  PanelLeftClose,
+  PanelLeftOpen,
+  PanelRightClose,
+  PanelRightOpen,
   Pilcrow,
   Plus,
   Printer,
@@ -30,10 +35,15 @@ import {
   Sigma,
   Table2,
   Type,
+  Underline,
   X,
 } from "lucide-react";
+import mermaid from "mermaid";
 import {
+  Children,
   useEffect,
+  useId,
+  isValidElement,
   useMemo,
   useRef,
   useState,
@@ -41,7 +51,7 @@ import {
   type DragEvent,
   type ReactNode,
 } from "react";
-import ReactMarkdown from "react-markdown";
+import ReactMarkdown, { type Components } from "react-markdown";
 import rehypeHighlight from "rehype-highlight";
 import rehypeKatex from "rehype-katex";
 import remarkGfm from "remark-gfm";
@@ -57,6 +67,7 @@ import {
   getDocumentStats,
   markdownToPlainText,
   markdownToRtf,
+  remarkInlineFeatures,
   searchWorkspace,
   slugifyHeading,
 } from "./lib/markdown";
@@ -77,7 +88,7 @@ interface Toast {
   tone: ToastTone;
 }
 
-const storageKey = "tenbase.sampleWorkspace.v1";
+const storageKey = "tenbase.sampleWorkspace.v2";
 
 const toolbarGroups = [
   [
@@ -96,11 +107,27 @@ const toolbarGroups = [
       placeholder: "emphasis",
     },
     {
+      label: "Underline",
+      icon: Underline,
+      prefix: "++",
+      suffix: "++",
+      placeholder: "underlined text",
+    },
+    {
       label: "Inline code",
       icon: Code2,
       prefix: "`",
       suffix: "`",
       placeholder: "code",
+    },
+  ],
+  [
+    {
+      label: "Highlight",
+      icon: Highlighter,
+      prefix: "==",
+      suffix: "==",
+      placeholder: "highlighted text",
     },
   ],
   [
@@ -120,12 +147,82 @@ const toolbarGroups = [
   [
     { label: "Math", icon: Sigma, block: "$$\nE = mc^2\n$$" },
     {
+      label: "Diagram",
+      icon: Hash,
+      block:
+        "```mermaid\nflowchart LR\n  draft[Draft] --> review[Review]\n  review --> publish[Publish]\n```",
+    },
+    {
       label: "Code block",
       icon: Hash,
       block: '```ts\nconst note = "Tenbase"\n```',
     },
   ],
 ];
+
+mermaid.initialize({
+  startOnLoad: false,
+  securityLevel: "strict",
+  theme: "base",
+  themeVariables: {
+    background: "#ffffff",
+    primaryColor: "#f8fafc",
+    primaryBorderColor: "#9aa2ad",
+    primaryTextColor: "#404040",
+    lineColor: "#c7ccd3",
+    fontFamily:
+      "Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif",
+    fontSize: "16px",
+    edgeLabelBackground: "#ffffff",
+  },
+});
+
+function MermaidDiagram({ chart }: { chart: string }) {
+  const id = useId().replace(/:/g, "");
+  const [svg, setSvg] = useState("");
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    mermaid
+      .render(`tenbase-diagram-${id}`, chart)
+      .then(({ svg: renderedSvg }) => {
+        if (!cancelled) {
+          setSvg(renderedSvg);
+          setError(null);
+        }
+      })
+      .catch((reason: unknown) => {
+        if (!cancelled) {
+          setSvg("");
+          setError(
+            reason instanceof Error ? reason.message : "Could not render graph",
+          );
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [chart, id]);
+
+  if (error) {
+    return (
+      <pre className="diagram-error">
+        <code>{error}</code>
+      </pre>
+    );
+  }
+
+  return (
+    <figure
+      className="mermaid-diagram"
+      aria-label="Rendered graph"
+      dangerouslySetInnerHTML={{ __html: svg }}
+    />
+  );
+}
 
 function loadInitialFiles() {
   try {
@@ -184,6 +281,8 @@ function App() {
   const [source, setSource] = useState<WorkspaceSource>("sample");
   const [query, setQuery] = useState("");
   const [viewMode, setViewMode] = useState<ViewMode>("split");
+  const [isSidebarVisible, setIsSidebarVisible] = useState(true);
+  const [isInspectorVisible, setIsInspectorVisible] = useState(true);
   const [toast, setToast] = useState<Toast | null>(null);
   const [isSaving, setIsSaving] = useState(false);
   const previewRef = useRef<HTMLElement | null>(null);
@@ -632,7 +731,7 @@ function App() {
     );
   };
 
-  const markdownComponents = {
+  const markdownComponents: Components = {
     h1: ({ children }: { children?: ReactNode }) => (
       <h1 id={getRenderedHeadingId(1, children)}>{children}</h1>
     ),
@@ -651,6 +750,34 @@ function App() {
     h6: ({ children }: { children?: ReactNode }) => (
       <h6 id={getRenderedHeadingId(6, children)}>{children}</h6>
     ),
+    pre: ({ children, ...props }) => {
+      const child = Children.toArray(children)[0];
+      if (
+        isValidElement(child) &&
+        typeof child.props === "object" &&
+        child.props !== null &&
+        "className" in child.props &&
+        String(child.props.className).includes("language-mermaid")
+      ) {
+        return <>{children}</>;
+      }
+
+      return <pre {...props}>{children}</pre>;
+    },
+    code: ({ className, children, ...props }) => {
+      const language = /language-(\w+)/.exec(className ?? "")?.[1];
+      const code = String(children).replace(/\n$/, "");
+
+      if (language === "mermaid") {
+        return <MermaidDiagram chart={code} />;
+      }
+
+      return (
+        <code className={className} {...props}>
+          {children}
+        </code>
+      );
+    },
   };
 
   const saveStatus = isSaving
@@ -658,6 +785,13 @@ function App() {
     : dirtyCount > 0
       ? `${dirtyCount} unsaved`
       : "Saved";
+  const workspaceClassName = [
+    "workspace",
+    !isSidebarVisible ? "sidebar-hidden" : "",
+    !isInspectorVisible ? "inspector-hidden" : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
 
   return (
     <div className="app-shell">
@@ -666,6 +800,31 @@ function App() {
           <span className="close-dot" />
           <span className="minimize-dot" />
           <span className="zoom-dot" />
+        </div>
+
+        <div className="layout-controls">
+          <button
+            type="button"
+            className="icon-command"
+            aria-label={
+              isSidebarVisible
+                ? "Hide workspace sidebar"
+                : "Show workspace sidebar"
+            }
+            aria-pressed={isSidebarVisible}
+            title={
+              isSidebarVisible
+                ? "Hide workspace sidebar"
+                : "Show workspace sidebar"
+            }
+            onClick={() => setIsSidebarVisible((visible) => !visible)}
+          >
+            {isSidebarVisible ? (
+              <PanelLeftClose aria-hidden="true" />
+            ) : (
+              <PanelLeftOpen aria-hidden="true" />
+            )}
+          </button>
         </div>
 
         <div className="brand" aria-label="Tenbase">
@@ -712,10 +871,32 @@ function App() {
             <Save aria-hidden="true" />
             <span>Save</span>
           </button>
+          <button
+            type="button"
+            className="icon-command"
+            aria-label={
+              isInspectorVisible
+                ? "Hide document inspector"
+                : "Show document inspector"
+            }
+            aria-pressed={isInspectorVisible}
+            title={
+              isInspectorVisible
+                ? "Hide document inspector"
+                : "Show document inspector"
+            }
+            onClick={() => setIsInspectorVisible((visible) => !visible)}
+          >
+            {isInspectorVisible ? (
+              <PanelRightClose aria-hidden="true" />
+            ) : (
+              <PanelRightOpen aria-hidden="true" />
+            )}
+          </button>
         </div>
       </header>
 
-      <main className="workspace">
+      <main className={workspaceClassName}>
         <aside className="sidebar" aria-label="Workspace files">
           <div className="pane-heading">
             <div>
@@ -902,7 +1083,7 @@ function App() {
               </div>
               <article className="markdown-preview" ref={previewRef}>
                 <ReactMarkdown
-                  remarkPlugins={[remarkGfm, remarkMath]}
+                  remarkPlugins={[remarkInlineFeatures, remarkGfm, remarkMath]}
                   rehypePlugins={[rehypeKatex, rehypeHighlight]}
                   components={markdownComponents}
                 >

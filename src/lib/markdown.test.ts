@@ -50,6 +50,12 @@ describe("markdown helpers", () => {
     ).toBe("Tenbase keeps portable.");
   });
 
+  it("keeps inline highlight and underline text readable in plain text", () => {
+    expect(markdownToPlainText("==Important== and ++underlined++ text.")).toBe(
+      "Important and underlined text.",
+    );
+  });
+
   it("searches both paths and content", () => {
     const files: WorkspaceFile[] = [
       {

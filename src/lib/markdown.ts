@@ -23,6 +23,60 @@ const voidElements = new Set([
   "wbr",
 ]);
 
+interface MarkdownNode {
+  type: string;
+  value?: string;
+  children?: MarkdownNode[];
+  data?: {
+    hName?: string;
+  };
+}
+
+function splitInlineFeatures(value: string): MarkdownNode[] {
+  const nodes: MarkdownNode[] = [];
+  const pattern = /(==([^=\n]+)==|\+\+([^+\n]+)\+\+)/g;
+  let lastIndex = 0;
+  let match: RegExpExecArray | null;
+
+  while ((match = pattern.exec(value)) !== null) {
+    if (match.index > lastIndex) {
+      nodes.push({ type: "text", value: value.slice(lastIndex, match.index) });
+    }
+
+    nodes.push({
+      type: "text",
+      value: match[2] ?? match[3],
+      data: { hName: match[2] ? "mark" : "u" },
+    });
+    lastIndex = pattern.lastIndex;
+  }
+
+  if (lastIndex < value.length) {
+    nodes.push({ type: "text", value: value.slice(lastIndex) });
+  }
+
+  return nodes.length ? nodes : [{ type: "text", value }];
+}
+
+function transformInlineFeatures(node: MarkdownNode) {
+  if (!node.children) return;
+
+  node.children = node.children.flatMap((child) => {
+    if (child.type === "text" && child.value) {
+      return splitInlineFeatures(child.value);
+    }
+
+    transformInlineFeatures(child);
+    return child;
+  });
+}
+
+export function remarkInlineFeatures() {
+  return (tree: MarkdownNode) => {
+    transformInlineFeatures(tree);
+  };
+}
+
 export function slugifyHeading(text: string, taken = new Set<string>()) {
   const base =
     text
@@ -82,6 +136,8 @@ export function extractHeadings(markdown: string): HeadingItem[] {
 export function markdownToPlainText(markdown: string) {
   return markdown
     .replace(/```[\s\S]*?```/g, " ")
+    .replace(/==([^=\n]+)==/g, "$1")
+    .replace(/\+\+([^+\n]+)\+\+/g, "$1")
     .replace(/!\[([^\]]*)\]\([^)]+\)/g, "$1")
     .replace(/\[([^\]]+)\]\([^)]+\)/g, "$1")
     .replace(markdownNoise, " ")

@@ -4,6 +4,49 @@ const now = Date.now();
 
 export const sampleFiles: WorkspaceFile[] = [
   {
+    id: "architecture",
+    name: "architecture.md",
+    path: "Side Projects iOS/FocusDrop/architecture.md",
+    updatedAt: now,
+    savedContent: "",
+    content: `# State Management
+
+Unidirectional data flow enforced throughout. All session state changes route through a single \`SessionStore\` ++observable++.
+
+\`\`\`mermaid
+flowchart LR
+  idle([idle]) -->|Session Start| active([active])
+  active -->|Session Ends| complete([complete])
+  active -->|User Pauses| paused([paused])
+  paused -->|User Resumes| active
+  complete -. Session Reset .-> idle
+  active -. Session Reset .-> idle
+
+  classDef idle fill:#f8fafc,stroke:#9aa2ad,color:#404040
+  classDef active fill:#eef4ff,stroke:#7ea6ff,color:#2d74ff
+  classDef paused fill:#fff4eb,stroke:#d98a55,color:#c56a26
+  classDef complete fill:#eefaf1,stroke:#69b987,color:#328a52
+
+  class idle idle
+  class active active
+  class paused paused
+  class complete complete
+\`\`\`
+
+## Key types
+
+- \`SessionState\` — enum covering idle, active, paused, complete
+- \`SessionStore\` — \`@Observable\` class, owns all timer logic
+- \`FocusIntent\` — duration + label, immutable after session start
+
+==Never mutate session state directly from a view.== All actions go through \`store.dispatch()\`.
+
+> Note
+>
+> \`@Observable\` requires a manual \`Codable\` conformance workaround. Keep persistence behind \`api-notes.md\`.
+`,
+  },
+  {
     id: "welcome",
     name: "Welcome.md",
     path: "Starter/Welcome.md",

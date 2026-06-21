@@ -124,6 +124,7 @@
 }
 
 .topbar-actions,
+.layout-controls,
 .format-toolbar,
 .tool-group,
 .view-switcher,
@@ -139,6 +140,7 @@ button {
 }
 
 .command-button,
+.icon-command,
 .format-toolbar button,
 .view-switcher button,
 .action-grid button {
@@ -162,6 +164,19 @@ button {
 .command-button {
   padding: 0 14px;
   box-shadow: 0 7px 16px rgba(41, 56, 75, 0.08);
+}
+
+.icon-command {
+  width: 38px;
+  padding: 0;
+  border-radius: 14px;
+  box-shadow: 0 10px 24px rgba(41, 56, 75, 0.1);
+}
+
+.icon-command[aria-pressed="true"] {
+  color: var(--accent);
+  border-color: color-mix(in srgb, var(--accent), transparent 30%);
+  background: var(--accent-soft);
 }
 
 .command-button.primary {
@@ -191,6 +206,7 @@ button {
 }
 
 .command-button:not(:disabled):hover,
+.icon-command:hover,
 .format-toolbar button:hover,
 .view-switcher button:hover,
 .action-grid button:hover {
@@ -212,6 +228,23 @@ button {
   min-height: 0;
   display: grid;
   grid-template-columns: 278px minmax(0, 1fr) 286px;
+}
+
+.workspace.sidebar-hidden {
+  grid-template-columns: minmax(0, 1fr) 286px;
+}
+
+.workspace.inspector-hidden {
+  grid-template-columns: 278px minmax(0, 1fr);
+}
+
+.workspace.sidebar-hidden.inspector-hidden {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.workspace.sidebar-hidden .sidebar,
+.workspace.inspector-hidden .inspector {
+  display: none;
 }
 
 .sidebar,
@@ -635,6 +668,18 @@ button {
   padding: 3px 6px;
 }
 
+.markdown-preview mark {
+  border-radius: 5px;
+  background: #d7f7a8;
+  color: var(--doc-text);
+  padding: 1px 5px;
+}
+
+.markdown-preview u {
+  text-underline-offset: 0.16em;
+  text-decoration-thickness: 0.08em;
+}
+
 .markdown-preview pre {
   overflow: auto;
   border: 1px solid var(--border);
@@ -646,6 +691,31 @@ button {
 .markdown-preview pre code {
   padding: 0;
   background: transparent;
+}
+
+.mermaid-diagram {
+  display: flex;
+  justify-content: center;
+  margin: 28px 0 34px;
+  overflow-x: auto;
+}
+
+.mermaid-diagram svg {
+  width: min(760px, 100%);
+  height: auto;
+  min-height: 240px;
+}
+
+.mermaid-diagram .node rect,
+.mermaid-diagram .node polygon,
+.mermaid-diagram .node circle,
+.mermaid-diagram .node ellipse {
+  rx: 8px;
+  ry: 8px;
+}
+
+.diagram-error {
+  color: var(--danger);
 }
 
 .markdown-preview .hljs-keyword,
