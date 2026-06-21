@@ -1,11 +1,18 @@
 {
   "name": "tenbase",
   "private": true,
-  "version": "0.0.0",
+  "version": "0.1.0",
+  "description": "A local-first Markdown workspace for non-technical writers.",
   "type": "module",
+  "main": "electron/main.cjs",
+  "author": "Moe Ghashim",
+  "license": "MIT",
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "desktop:preview": "npm run build && electron .",
+    "desktop:package": "npm run build && electron-builder --mac dmg --arm64 --publish never",
+    "desktop:dir": "npm run build && electron-builder --mac dir --arm64 --publish never",
     "e2e": "playwright test",
     "format": "prettier --write .",
     "lint": "eslint .",
@@ -40,6 +47,8 @@
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@vitejs/plugin-react": "^6.0.1",
+    "electron": "^42.4.1",
+    "electron-builder": "^26.15.3",
     "eslint": "^10.3.0",
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.2",
@@ -51,5 +60,34 @@
     "typescript-eslint": "^8.59.2",
     "vite": "^8.0.12",
     "vitest": "^4.1.9"
+  },
+  "build": {
+    "appId": "com.moeghashim.tenbase",
+    "productName": "Tenbase",
+    "asar": true,
+    "directories": {
+      "output": "release"
+    },
+    "files": [
+      "dist/**/*",
+      "electron/**/*",
+      "package.json"
+    ],
+    "mac": {
+      "category": "public.app-category.productivity",
+      "target": [
+        {
+          "target": "dmg",
+          "arch": [
+            "arm64"
+          ]
+        }
+      ],
+      "identity": null,
+      "icon": "build/icon.icns"
+    },
+    "dmg": {
+      "artifactName": "${productName}-${version}-${arch}.${ext}"
+    }
   }
 }

@@ -1,4 +1,4 @@
-.PHONY: install dev build preview test e2e lint format typecheck check ship clean
+.PHONY: install dev build preview desktop-preview desktop-dir desktop-package test e2e lint format typecheck check ship clean
 
 install:
 	npm ci && echo "PASS install" || (echo "FAIL install"; exit 1)
@@ -11,6 +11,15 @@ build:
 
 preview:
 	npm run preview
+
+desktop-preview:
+	npm run desktop:preview
+
+desktop-dir:
+	npm run desktop:dir && echo "PASS desktop-dir" || (echo "FAIL desktop-dir"; exit 1)
+
+desktop-package:
+	npm run desktop:package && echo "PASS desktop-package" || (echo "FAIL desktop-package"; exit 1)
 
 test:
 	npm run test -- --run && echo "PASS test" || (echo "FAIL test"; exit 1)

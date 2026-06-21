@@ -26,9 +26,21 @@ Useful Make targets:
 ```bash
 make check
 make build
+make desktop-package
 make e2e
 make ship
 ```
+
+## Desktop App
+
+Tenbase can be packaged as a macOS desktop app with Electron:
+
+```bash
+npm install
+make desktop-package
+```
+
+The installable DMG is written to `release/Tenbase-0.1.0-arm64.dmg`. The app is currently unsigned, so macOS may show the standard warning when opening it outside the App Store.
 
 ## Browser Notes
 
