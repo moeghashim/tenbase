@@ -1,38 +1,28 @@
 # Tenbase Promo Design
 
-## Style Prompt
+## Product Goal
 
-Create a polished, light macOS document-window promo for Tenbase. The video should feel like Lettera-inspired desktop software: calm, precise, local-first, and writer-friendly. Use a warm off-white canvas, rounded white panels, soft gray sidebars, bright blue selection states, traffic-light window controls, and large editorial typography. Motion should be confident and smooth, like a product walkthrough rather than a loud SaaS ad.
+Replace the earlier promotional video with a current walkthrough that matches the app as built today. The video should make three things obvious: Tenbase is now packaged like a native desktop app, the writer and rendered page can expand without side panels, and the Lettera-inspired Markdown features are present in the actual UI.
 
-## Colors
+## Scenes
 
-- `#F4F3EF` — warm app background
-- `#FFFFFF` — primary window and document surfaces
-- `#F6F6F4` — sidebar and toolbar surface
-- `#0B63F6` — primary action blue
-- `#EAF2FF` — selected UI tint
-- `#064FC4` — selected UI text
-- `#343434` — headline text
-- `#60646B` — secondary labels
-- `#E2E2DF` — hairline borders
+1. Full desktop workspace with the real app screenshot, selected `architecture.md`, source editor, preview, and inspector.
+2. Focus mode showing collapsed workspace and inspector panels, with callouts for the panel toggles and view switcher.
+3. Preview-first view showing the Mermaid state graph, green text background highlight, underline, and colored graph nodes.
+4. Editor-first view showing plain Markdown source staying portable.
+5. Closing frame showing the packaged macOS installer, desktop readiness, and mobile-friendly workspace.
 
-## Typography
+## Visual Style
 
-- Headline: renderer-safe `serif`, 800, tight tracking for editorial warmth.
-- UI/body: renderer-safe `sans-serif`, 400-700, neutral and readable.
-- Code/source: renderer-safe `monospace`, 500-700, used sparingly for Markdown source moments.
+- Background: warm off-white `#f4f3ef`.
+- Surfaces: white `#ffffff`, soft gray `#f6f6f4`, and hairlines `#e2e2df`.
+- Accent colors: Tenbase blue `#2f73ff`, graph green `#7fcf8a`, graph orange `#f19b62`.
+- Text: charcoal `#343434`, muted gray `#60646b`.
+- Typography: renderer-safe `serif` for large statements, `sans-serif` for interface callouts, and `monospace` for Markdown tokens.
 
 ## Motion
 
-- Primary transition: horizontal push slide, medium energy, 0.5s `power3.inOut`.
-- Accent transition: gentle blur crossfade into the closing scene.
-- Entrances: use varied `expo.out`, `power3.out`, `back.out`, `sine.out`; no repeated single pattern in a scene.
-- Ambient motion: subtle window float, document pulse, slow hairline rule growth.
-
-## What NOT to Do
-
-- Do not use dark neon, purple-blue gradients, or generic SaaS card grids.
-- Do not make the video feel like a landing page hero.
-- Do not use stock images, abstract orbs, or decorative blobs.
-- Do not use tiny web-sized type; all text must read at video scale.
-- Do not introduce colors outside the product palette.
+- Use horizontal push transitions for feature progression.
+- Use a gentle blur crossfade into the closing scene.
+- Every scene has entrance motion and subtle screenshot pan or scale.
+- Avoid fake nested application windows. Screenshots should read as the real product surface, not a browser frame.
